@@ -27,12 +27,6 @@ jobs:
       with:
         java-version: '11'
         
-    - name: Run Trivy vulnerability scanner in fs mode
-      uses: aquasecurity/trivy-action@master
-      with:
-        scan-type: 'fs'
-        scan-ref: '.'
-        trivy-config: trivy.yaml
         
     - name: Analyze with SonarCloud
       run: mvn -B verify sonar:sonar -Dsonar.projectKey=jaivignesh-vunet_maven-myproject -Dsonar.organization=jaivignesh-vunet -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN

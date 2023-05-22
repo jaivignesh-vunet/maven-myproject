@@ -122,7 +122,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .  # The context for the build, assuming the Dockerfile is in the root of the repository
-          file: /Dockerfile  # Specify the path to your Dockerfile
           push: true
           tags: docker.io/jay2k02/test-repository:latest
         env:

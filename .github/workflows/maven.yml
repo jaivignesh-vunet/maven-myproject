@@ -87,31 +87,6 @@ jobs:
             path: Repo-results.sarif
             
             
-  Roofus_scan:
-    
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Run Trivy vulnerability scanner with rootfs command
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'rootfs'
-          scan-ref: 'rootfs-example-binary'
-          ignore-unfixed: true
-          format: 'sarif'
-          output: 'Roofus-results.sarif'
-          severity: 'CRITICAL,HIGH'
-          
-      - name: Upload Trivy scan results as artifact
-        uses: actions/upload-artifact@v2
-        with:
-            name: Roofus-results
-            path: Roofus-results.sarif    
-            
-            
-            
   Infrastructure_ascode:
     
       runs-on: ubuntu-latest
@@ -135,6 +110,19 @@ jobs:
         with:
             name: Infra-results
             path: Infra-results.sarif    
+            
+            
+  Build_Push_Docker:
+    
+      runs-on: ubuntu-latest
+      steps:
+      - name: Build and push Docker Image 
+        uses: mr-smithers-excellent/docker-build-push@v4
+        with:
+          image: jay2k02/test-repository
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
           
 
       

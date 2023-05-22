@@ -55,23 +55,38 @@ jobs:
         with:
           image-ref: 'docker.io/jaivignesh-vunet/maven-myproject:${{ github.sha }}'
           format: 'sarif'
-          output: 'trivy-results.sarif'
+          output: 'docker-results.sarif'
           
       - name: Upload Trivy scan results as artifact
         uses: actions/upload-artifact@v2
         with:
-          name: trivy-results
-          path: trivy-results.sarif
-
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
+          name: docker-results
+          path: docker-results.sarif
           
           
+  Repo_Scan:
 
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+  
+        - name: Run Trivy vulnerability scanner in repo mode
+          uses: aquasecurity/trivy-action@master
+          with:
+            scan-type: 'fs'
+            ignore-unfixed: true
+            format: 'sarif'
+            output: 'Repo-results.sarif'
+            severity: 'CRITICAL,HIGH'
+            
+        - name: Upload Trivy scan results as artifact
+          uses: actions/upload-artifact@v2
+          with:
+            name: Repo-results
+            path: Repo-results.sarif
+
+        
       
 
     

@@ -1,4 +1,6 @@
-FROM openjdk:8-jre-alpine
+FROM alpine:3.14
+
+RUN apk --no-cache add openjdk8-jre
 
 EXPOSE 8080
 

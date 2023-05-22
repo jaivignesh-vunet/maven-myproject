@@ -113,17 +113,17 @@ jobs:
             
             
   Truffle_Hog:
+    name: TruffleHog Enterprise scan
     runs-on: ubuntu-latest
-      
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        ref: ${{ github.head_ref }} // necessary for pull request workflow trigger
-
-    - name: trufflehog-scan
-      uses: ScottHelme/trufflehog-action@v1
-
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # fetch all history so multiple commits can be scanned
+      - name: TruffleHog Enterprise scan
+        uses: trufflesecurity/TruffleHog-Enterprise-Github-Action@main
+        with:
+            args: --fail-verified ${{ github.event.repository.default_branch }} HEAD
   
   
   Build_Push_Docker:

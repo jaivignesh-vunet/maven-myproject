@@ -111,7 +111,18 @@ jobs:
             name: Infra-results
             path: Infra-results.sarif    
             
-            
+  Truffle_Hog:
+      runs-on: ubuntu-latest
+      
+      steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }} // necessary for pull request workflow trigger
+      - name: trufflehog-actions-scan
+        uses: edplato/trufflehog-actions-scan@master
+  
+  
   Build_Push_Docker:
     
       runs-on: ubuntu-latest

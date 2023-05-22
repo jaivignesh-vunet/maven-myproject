@@ -30,7 +30,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       
-  Test_docker:
+  Docker_Scan:
     
     runs-on: ubuntu-latest
     steps:
@@ -85,7 +85,60 @@ jobs:
           with:
             name: Repo-results
             path: Repo-results.sarif
+            
+            
+  Roofus_scan:
+    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      - name: Run Trivy vulnerability scanner with rootfs command
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'rootfs'
+          scan-ref: 'rootfs-example-binary'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'Roofus-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          
+      - name: Upload Trivy scan results as artifact
+        uses: actions/upload-artifact@v2
+        with:
+            name: Roofus-results
+            path: Roofus-results.sarif    
+            
+            
+            
+  Infrastructure_ascode:
+    
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Trivy vulnerability scanner in IaC mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          hide-progress: false
+          format: 'sarif'
+          output: 'Infra-results.sarif'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+          
+      - name: Upload Trivy scan results as artifact
+        uses: actions/upload-artifact@v2
+        with:
+            name: Infra-results
+            path: Infra-results.sarif    
+          
+
+      
+        
         
       
 
